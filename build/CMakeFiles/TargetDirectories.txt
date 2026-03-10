@@ -1,0 +1,3 @@
+/Users/reyaanshsinha/sShell/build/CMakeFiles/sShell.dir
+/Users/reyaanshsinha/sShell/build/CMakeFiles/edit_cache.dir
+/Users/reyaanshsinha/sShell/build/CMakeFiles/rebuild_cache.dir

@@ -15,10 +15,8 @@ void print_prompt(void);
 /* Set the current prompt prefix */
 void set_prompt_prefix(const char *prefix);
 
-/* User management for shell-local authentication */
-int add_shell_user(const char *username, const char *password);
+/* User lookup via the host system account database */
 int shell_user_exists(const char *username);
-int authenticate_shell_user(const char *username, const char *password);
-char *read_password_prompt(const char *prompt);
+const char *shell_default_user(void);
 
 #endif /* MAIN_H */

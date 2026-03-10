@@ -61,72 +61,13 @@ static int builtin_echo(int argc, char **argv) {
 
 static int builtin_su(int argc, char **argv) {
     const char *username = argc > 1 ? argv[1] : "root";
-    char *password = NULL;
 
     if (!shell_user_exists(username)) {
         fprintf(stderr, "[sShell] Error: user '%s' does not exist.\n", username);
         return 1;
     }
 
-    password = read_password_prompt("Password: ");
-
-    if (!password) {
-        fprintf(stderr, "[sShell] Error: failed to read password.\n");
-        return 1;
-    }
-
-    if (!authenticate_shell_user(username, password)) {
-        fprintf(stderr, "[sShell] Authentication failure.\n");
-        free(password);
-        return 1;
-    }
-
     set_prompt_prefix(username);
-    free(password);
-    return 0;
-}
-
-static int builtin_adduser(int argc, char **argv) {
-    char *password = NULL;
-    char *password_confirm = NULL;
-
-    if (argc != 2) {
-        fprintf(stderr, "[sShell] Usage: adduser <name>\n");
-        return 1;
-    }
-
-    if (shell_user_exists(argv[1])) {
-        fprintf(stderr, "[sShell] Error: user '%s' already exists.\n", argv[1]);
-        return 1;
-    }
-
-    password = read_password_prompt("New password: ");
-    password_confirm = read_password_prompt("Retype new password: ");
-
-    if (!password || !password_confirm) {
-        fprintf(stderr, "[sShell] Error: failed to read password.\n");
-        free(password);
-        free(password_confirm);
-        return 1;
-    }
-
-    if (strcmp(password, password_confirm) != 0) {
-        fprintf(stderr, "[sShell] Error: passwords do not match.\n");
-        free(password);
-        free(password_confirm);
-        return 1;
-    }
-
-    if (add_shell_user(argv[1], password) != 0) {
-        fprintf(stderr, "[sShell] Error: failed to create user.\n");
-        free(password);
-        free(password_confirm);
-        return 1;
-    }
-
-    printf("User '%s' created.\n", argv[1]);
-    free(password);
-    free(password_confirm);
     return 0;
 }
 
@@ -138,9 +79,8 @@ static int builtin_help(int argc, char **argv) {
 
     printf("sShell builtin commands:\n");
     printf("cd <optional: path>          Change directory to a specified path; no path changes to HOME directory.\n");
-    printf("adduser <name>               Create a shell user and prompt for a password twice.\n");
     printf("echo <message>               Print a specified message in the standard output.\n");
-    printf("su <optional: user>          Switch shell user after validating the user's password.\n");
+    printf("su <optional: user>          Switch shell user if the account exists on the host system.\n");
     printf("help                         Display all builtin commands and their uses.\n");
     printf("tokens \"<command string>\"    Display the tokenized form of a command string.\n");
     printf("ast \"<command string>\"       Display the abstract syntax tree of a command string.\n");
@@ -259,7 +199,6 @@ static int builtin_exit(int argc, char **argv) {
 static BuiltinEntry builtin_commands[] = {
 
     {"cd", builtin_cd},
-    {"adduser", builtin_adduser},
     {"echo", builtin_echo},
     {"su", builtin_su},
     {"help", builtin_help},
