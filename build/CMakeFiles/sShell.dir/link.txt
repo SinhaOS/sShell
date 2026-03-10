@@ -1,1 +1,0 @@
-/usr/bin/cc -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/sShell.dir/src/ast.c.o CMakeFiles/sShell.dir/src/builtins.c.o CMakeFiles/sShell.dir/src/exec.c.o CMakeFiles/sShell.dir/src/lexer.c.o CMakeFiles/sShell.dir/src/main.c.o CMakeFiles/sShell.dir/src/parser.c.o CMakeFiles/sShell.dir/src/utils.c.o -o sShell
